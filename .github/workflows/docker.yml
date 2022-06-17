@@ -12,14 +12,18 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
+
+      # Checkout the repo
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      # Login to Azure
       - name: "Login via Azure CLI"
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # Login to ACR and Build and push the image
       - name: "Build and push image"
         uses: azure/docker-login@v1
         with:
@@ -27,19 +31,19 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/20211212:v1
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/20211212:v1
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.ID_EFREI }}:v1
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.ID_EFREI }}:v1
 
+      # Deploy to Azure Container Instances (ACI)
       - name: "Deploy to Azure Container Instances"
         uses: "azure/aci-deploy@v1"
         with:
           resource-group: ${{ secrets.RESOURCE_GROUP }}
-          dns-name-label: devops-20211212
-          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/20211212:v1
+          dns-name-label: devops-${{ secrets.ID_EFREI }}
+          image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.ID_EFREI }}:v1
           registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           registry-username: ${{ secrets.REGISTRY_USERNAME }}
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-          environment-variables: API_KEY=${{ secrets.API_KEY }}
-          name: "20211212"
-          ports: 8081
+          secure-environment-variables: API_KEY=${{ secrets.API_KEY }}
+          name: ${{ secrets.ID_EFREI }}
           location: "france central"
