@@ -41,5 +41,5 @@ jobs:
           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
           environment-variables: API_KEY=${{ secrets.API_KEY }}
           name: "20211212"
-          ports: 80
+          ports: 8081
           location: "france central"
