@@ -99,5 +99,3 @@ curl "http://devops-20211212.francecentral.azurecontainer.io/?lat=5.902785&lon=1
 
 ### Important links
 - DockerHub : https://hub.docker.com/repository/docker/ekane3/efrei-devops-tp2  
-
-- Lien GitHub : https://github.com/ekane3/TP2_Devops
